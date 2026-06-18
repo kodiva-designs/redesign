@@ -1,550 +1,477 @@
-/* ==========================================================================
-   Kodiva Studio - Premium Landing Page Interactions
-   Frameworks: Vanilla JS + GSAP (GreenSock Animation Platform)
-   ========================================================================== */
+/* ===================================================================
+   KODIVA — Interactions
+   Lenis smooth scroll + GSAP ScrollTrigger choreography
+   =================================================================== */
+(function () {
+  'use strict';
 
-// Configuration: Toggle frontend analytics console HUD
-const ENABLE_ANALYTICS_CONSOLE = true;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  const hasGSAP = typeof gsap !== 'undefined';
+  const hasST = typeof ScrollTrigger !== 'undefined';
+  if (hasGSAP && hasST) gsap.registerPlugin(ScrollTrigger);
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Register GSAP plugins
-  gsap.registerPlugin(ScrollTrigger);
+  document.documentElement.classList.add('js');
 
-  // Initialize all modules
-  initCustomCursor();
-  initNavbarScroll();
-  initCollageParallax();
-  initScrollReveals();
-  initBeforeAfterSlider();
-  initFaqAccordion();
-  initAnalyticsConsole();
-  initFormSubmit();
-});
+  /* ---------------------------------------------------------------
+     1. PRELOADER
+     --------------------------------------------------------------- */
+  function runPreloader(done) {
+    const preloader = document.querySelector('[data-preloader]');
+    if (!preloader) return done && done();
 
-/* --------------------------------------------------------------------------
-   1. Analytics Logger HUD System
-   -------------------------------------------------------------------------- */
-const analyticsLogs = [];
-function logAnalyticsEvent(eventName, params = {}) {
-  const timestamp = new Date().toLocaleTimeString();
-  const logObj = { event: eventName, ...params };
-  analyticsLogs.push({ time: timestamp, data: logObj });
+    const progress = preloader.querySelector('[data-preload-progress]');
+    const countEl = preloader.querySelector('[data-preload-count]');
+    const words = preloader.querySelectorAll('[data-preload-words] span');
 
-  // Console logging
-  console.log(`[Analytics] ${eventName}:`, params);
-
-  // Update UI console if enabled
-  if (ENABLE_ANALYTICS_CONSOLE) {
-    const consoleBody = document.getElementById('analyticsLogsContainer');
-    if (consoleBody) {
-      const entry = document.createElement('div');
-      entry.className = 'log-entry';
-      entry.innerHTML = `
-        <span class="log-time">[${timestamp}]</span> 
-        <span class="log-event">${eventName}</span>: 
-        <span class="log-meta">${JSON.stringify(params)}</span>
-      `;
-      consoleBody.appendChild(entry);
-      // Auto scroll to bottom
-      consoleBody.scrollTop = consoleBody.scrollHeight;
+    if (reduceMotion || !hasGSAP) {
+      preloader.classList.add('is-done');
+      return done && done();
     }
-  }
-}
 
-function initAnalyticsConsole() {
-  const drawer = document.getElementById('analyticsDrawer');
-  const header = document.getElementById('analyticsHeader');
-
-  if (!ENABLE_ANALYTICS_CONSOLE) {
-    if (drawer) {
-      drawer.style.display = 'none';
-    }
-    return;
-  }
-
-  if (header && drawer) {
-    header.addEventListener('click', () => {
-      drawer.classList.toggle('minimized');
+    const tl = gsap.timeline({
+      onComplete: () => {
+        preloader.classList.add('is-done');
+        done && done();
+      },
     });
+
+    tl.to(words, {
+      y: 0,
+      duration: 0.9,
+      ease: 'expo.out',
+      stagger: 0.05,
+    });
+
+    tl.to(progress, {
+      width: '100%',
+      duration: 1.4,
+      ease: 'power2.inOut',
+      onUpdate: function () {
+        const v = Math.round(this.progress() * 100);
+        if (countEl) countEl.textContent = v;
+      },
+    }, 0.2);
+
+    tl.to(words, {
+      y: -120,
+      duration: 0.7,
+      ease: 'expo.in',
+      stagger: 0.03,
+    }, '+=0.25');
   }
 
-  // Initial log
-  logAnalyticsEvent('page_load', { section: 'global', timestamp: Date.now() });
-}
-
-/* --------------------------------------------------------------------------
-   2. Custom Cursor Module
-   -------------------------------------------------------------------------- */
-function initCustomCursor() {
-  const cursor = document.getElementById('customCursor');
-  if (!cursor) return;
-
-  let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  // Use GSAP ticker for smooth lag-interpolated cursor follow
-  gsap.ticker.add(() => {
-    const dt = 1.0 - Math.pow(1.0 - 0.15, gsap.ticker.deltaRatio());
-    cursorX += (mouseX - cursorX) * dt;
-    cursorY += (mouseY - cursorY) * dt;
-    gsap.set(cursor, { x: cursorX, y: cursorY });
-  });
-
-  // Interactive hovers
-  const viewHoverables = document.querySelectorAll('.hover-view');
-  viewHoverables.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      cursor.classList.add('hovered');
+  /* ---------------------------------------------------------------
+     2. LENIS SMOOTH SCROLL
+     --------------------------------------------------------------- */
+  let lenis = null;
+  function initLenis() {
+    if (reduceMotion || typeof Lenis === 'undefined') return;
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false,
     });
-    item.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hovered');
-    });
-  });
-
-  const ctaHoverables = document.querySelectorAll('.hover-cta-state');
-  ctaHoverables.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      cursor.classList.add('redesign-hovered');
-    });
-    item.addEventListener('mouseleave', () => {
-      cursor.classList.remove('redesign-hovered');
-    });
-  });
-}
-
-/* --------------------------------------------------------------------------
-   3. Navbar Dynamic State
-   -------------------------------------------------------------------------- */
-function initNavbarScroll() {
-  const navbar = document.getElementById('navbar');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const toggleBtn = document.getElementById('mobileNavToggle');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
-  });
+    requestAnimationFrame(raf);
 
-  // Mobile Menu toggles
-  if (toggleBtn && mobileMenu) {
-    toggleBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('active');
-      const spans = toggleBtn.querySelectorAll('span');
-      if (mobileMenu.classList.contains('active')) {
-        spans[0].style.transform = 'translateY(8px) rotate(45deg)';
-        spans[1].style.opacity = '0';
-        spans[2].style.transform = 'translateY(-8px) rotate(-45deg)';
-        logAnalyticsEvent('mobile_menu_open');
-      } else {
-        spans[0].style.transform = 'none';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = 'none';
-        logAnalyticsEvent('mobile_menu_close');
-      }
-    });
+    if (hasST) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
 
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        const spans = toggleBtn.querySelectorAll('span');
-        spans[0].style.transform = 'none';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = 'none';
+    // anchor links → lenis
+    document.querySelectorAll('a[href^="#"]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (id.length > 1) {
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: -20, duration: 1.3 });
+            // close mobile menu if open
+            closeMobileMenu();
+          }
+        }
       });
     });
   }
 
-  // Scroll events for CTA button
-  const viewDesignsBtns = document.querySelectorAll('.scroll-to-work');
-  viewDesignsBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  /* ---------------------------------------------------------------
+     3. CUSTOM CURSOR
+     --------------------------------------------------------------- */
+  function initCursor() {
+    if (isTouch || reduceMotion) return;
+    const cursor = document.querySelector('[data-cursor]');
+    if (!cursor) return;
+    const dot = cursor.querySelector('.cursor__dot');
+    const ring = cursor.querySelector('.cursor__ring');
+
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+    });
+    window.addEventListener('mousedown', () => cursor.classList.add('is-down'));
+    window.addEventListener('mouseup', () => cursor.classList.remove('is-down'));
+
+    (function loop() {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+      requestAnimationFrame(loop);
+    })();
+
+    document.querySelectorAll('[data-cursor-hover]').forEach((el) => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-hover'));
+    });
+
+    document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+    document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
+  }
+
+  /* ---------------------------------------------------------------
+     4. MAGNETIC BUTTONS
+     --------------------------------------------------------------- */
+  function initMagnetic() {
+    if (isTouch || reduceMotion) return;
+    document.querySelectorAll('[data-magnetic]').forEach((el) => {
+      const strength = 0.35;
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------
+     5. LINE-MASK + BLOCK REVEALS  (class-based — robust)
+     --------------------------------------------------------------- */
+  // Assign --line-i to each line inside a title so CSS can stagger them
+  function indexTitleLines(title) {
+    title.querySelectorAll('.line').forEach((l, i) => l.style.setProperty('--line-i', i));
+  }
+
+  function revealTitle(title) {
+    if (title.classList.contains('is-revealed')) return;
+    indexTitleLines(title);
+    title.classList.add('is-revealed');
+  }
+
+  function initReveals() {
+    // Assign indices up front so delays are ready
+    document.querySelectorAll('.section-title, .hero__title, .final__title').forEach(indexTitleLines);
+
+    // Block reveals via IntersectionObserver
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+    );
+    document.querySelectorAll('[data-reveal-block], [data-reveal-line]').forEach((el) => io.observe(el));
+
+    // Section title line reveals — stagger via CSS when in view
+    const titleIO = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            revealTitle(entry.target);
+            titleIO.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: '0px 0px -5% 0px' }
+    );
+    document.querySelectorAll('.section-title, .final__title').forEach((t) => titleIO.observe(t));
+  }
+
+  function animateHero() {
+    // Hero lines reveal shortly after preloader finishes (class-based, reliable)
+    const heroTitle = document.querySelector('.hero__title');
+    if (heroTitle) {
+      indexTitleLines(heroTitle);
+      requestAnimationFrame(() => revealTitle(heroTitle));
+    }
+    // hero sub-blocks fade in
+    const io = new IntersectionObserver(() => {});
+    document.querySelectorAll('.hero [data-reveal-block]').forEach((el) => {
+      el.classList.add('is-in');
+    });
+    if (hasST) ScrollTrigger.refresh();
+  }
+
+  /* ---------------------------------------------------------------
+     6. NAV — scrolled state + mobile menu
+     --------------------------------------------------------------- */
+  function initNav() {
+    const nav = document.querySelector('[data-nav]');
+    const burger = document.querySelector('[data-burger]');
+    const menu = document.querySelector('[data-mobile-menu]');
+
+    const onScroll = () => {
+      if (window.scrollY > 40) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    if (burger && menu) {
+      burger.addEventListener('click', () => {
+        const open = menu.classList.toggle('is-open');
+        burger.classList.toggle('is-open', open);
+        menu.setAttribute('aria-hidden', !open);
+        burger.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+        if (lenis) open ? lenis.stop() : lenis.start();
+      });
+    }
+  }
+  function closeMobileMenu() {
+    const menu = document.querySelector('[data-mobile-menu]');
+    const burger = document.querySelector('[data-burger]');
+    if (!menu || !menu.classList.contains('is-open')) return;
+    menu.classList.remove('is-open');
+    burger.classList.remove('is-open');
+    menu.setAttribute('aria-hidden', 'true');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lenis) lenis.start();
+  }
+
+  /* ---------------------------------------------------------------
+     7. HERO PARALLAX BLOBS
+     --------------------------------------------------------------- */
+  function initParallax() {
+    if (reduceMotion || isTouch) return;
+    const blobs = document.querySelectorAll('[data-parallax]');
+    if (!blobs.length) return;
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      blobs.forEach((b) => {
+        const depth = parseFloat(b.dataset.parallax) || 0.05;
+        b.style.transform = `translate(${x * depth * 100}px, ${y * depth * 100}px)`;
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------
+     8. STATS COUNTERS
+     --------------------------------------------------------------- */
+  function initCounters() {
+    const counters = document.querySelectorAll('[data-count]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.count);
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        const suffix = el.dataset.suffix || '';
+        const dur = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 4);
+          const val = (target * eased).toFixed(decimals);
+          el.textContent = val + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach((c) => io.observe(c));
+  }
+
+  /* ---------------------------------------------------------------
+     9. BEFORE / AFTER SLIDER
+     --------------------------------------------------------------- */
+  function initBeforeAfter() {
+    const wrap = document.querySelector('[data-ba]');
+    if (!wrap) return;
+    const overlay = wrap.querySelector('[data-ba-overlay]');
+    const handle = wrap.querySelector('[data-ba-handle]');
+    let dragging = false;
+
+    function setPos(clientX) {
+      const r = wrap.getBoundingClientRect();
+      let pct = ((clientX - r.left) / r.width) * 100;
+      pct = Math.max(2, Math.min(98, pct));
+      overlay.style.width = pct + '%';
+      handle.style.left = pct + '%';
+    }
+
+    const onDown = (e) => {
+      dragging = true;
+      setPos(e.touches ? e.touches[0].clientX : e.clientX);
       e.preventDefault();
-      const workSection = document.getElementById('work');
-      if (workSection) {
-        workSection.scrollIntoView({ behavior: 'smooth' });
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      setPos(e.touches ? e.touches[0].clientX : e.clientX);
+    };
+    const onUp = () => (dragging = false);
 
-        // Log event
-        const ctaLabel = btn.innerText.trim();
-        const parentSection = btn.closest('section') ? btn.closest('section').id : 'navbar';
-        logAnalyticsEvent('hero_cta_click', { section: parentSection, cta_label: ctaLabel });
-      }
+    handle.addEventListener('mousedown', onDown);
+    handle.addEventListener('touchstart', onDown, { passive: false });
+    wrap.addEventListener('mousedown', onDown);
+    wrap.addEventListener('touchstart', onDown, { passive: false });
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchend', onUp);
+
+    // intro animation
+    if (hasGSAP && hasST && !reduceMotion) {
+      gsap.set(overlay, { width: '100%' });
+      gsap.set(handle, { left: '100%' });
+      ScrollTrigger.create({
+        trigger: wrap,
+        start: 'top 75%',
+        once: true,
+        onEnter: () => {
+          gsap.to(overlay, {
+            width: '50%',
+            duration: 1.4,
+            ease: 'expo.out',
+          });
+          gsap.to(handle, {
+            left: '50%',
+            duration: 1.4,
+            ease: 'expo.out',
+          });
+        },
+      });
+    }
+  }
+
+  /* ---------------------------------------------------------------
+     10. HORIZONTAL SHOWCASE
+     --------------------------------------------------------------- */
+  function initShowcase() {
+    const section = document.querySelector('.showcase');
+    const pin = document.querySelector('[data-showcase-pin]');
+    const track = document.querySelector('[data-showcase-track]');
+    const progress = document.querySelector('[data-showcase-progress]');
+    if (!section || !pin || !track) return;
+
+    // On mobile/native, fall back to native horizontal overflow scroll
+    const desktop = window.matchMedia('(min-width: 769px)').matches;
+    if (!desktop || !hasGSAP || !hasST || reduceMotion) {
+      pin.style.height = 'auto';
+      track.style.overflowX = 'auto';
+      track.style.scrollSnapType = 'x mandatory';
+      track.querySelectorAll('.case').forEach((c) => (c.style.scrollSnapAlign = 'start'));
+      if (progress && progress.parentElement) progress.parentElement.style.display = 'none';
+      return;
+    }
+
+    let scrollWidth = 0;
+    function recalc() {
+      scrollWidth = track.scrollWidth - window.innerWidth + 64; // gutter compensation
+      if (scrollWidth < 0) scrollWidth = 0;
+    }
+    recalc();
+
+    const st = ScrollTrigger.create({
+      trigger: pin,
+      start: 'top top',
+      end: () => `+=${scrollWidth}`,
+      pin: true,
+      scrub: 1,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const x = -self.progress * scrollWidth;
+        gsap.set(track, { x });
+        if (progress) progress.style.width = self.progress * 100 + '%';
+      },
     });
-  });
-}
 
-/* --------------------------------------------------------------------------
-   4. Parallax Collage (Hero Section)
-   -------------------------------------------------------------------------- */
-function initCollageParallax() {
-  const items = document.querySelectorAll('.collage-item');
-  if (items.length === 0) return;
-
-  // Parallax elements moving at different rates based on mouse hover in hero
-  const hero = document.getElementById('hero');
-  if (hero) {
-    hero.addEventListener('mousemove', (e) => {
-      const { width, height } = hero.getBoundingClientRect();
-      const xVal = (e.clientX - width / 2) / (width / 2); // -1 to 1
-      const yVal = (e.clientY - height / 2) / (height / 2); // -1 to 1
-
-      gsap.to(items[0], { x: xVal * 15, y: yVal * 15, duration: 1, ease: 'power2.out' });
-      gsap.to(items[1], { x: xVal * -25, y: yVal * -20, duration: 1, ease: 'power2.out' });
-      gsap.to(items[2], { x: xVal * 10, y: yVal * -12, duration: 1, ease: 'power2.out' });
+    window.addEventListener('resize', () => {
+      recalc();
+      st.refresh();
     });
+  }
 
-    // Reset on mouse leave
-    hero.addEventListener('mouseleave', () => {
-      items.forEach(item => {
-        gsap.to(item, { x: 0, y: 0, duration: 1.5, ease: 'power2.out' });
+  /* ---------------------------------------------------------------
+     11. FAQ accordion (native details, just close others on open)
+     --------------------------------------------------------------- */
+  function initFAQ() {
+    const items = document.querySelectorAll('.faq__item');
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          items.forEach((other) => { if (other !== item) other.open = false; });
+        }
       });
     });
   }
 
-  // Vertical Parallax Scroll Effect
-  gsap.to(items[0], {
-    y: '-10%',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true
-    }
-  });
-  gsap.to(items[1], {
-    y: '-30%',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true
-    }
-  });
-  gsap.to(items[2], {
-    y: '-18%',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true
-    }
-  });
-}
-
-/* --------------------------------------------------------------------------
-   5. Scroll Reveal & Metrics Animations
-   -------------------------------------------------------------------------- */
-function initScrollReveals() {
-  // Stagger reveal for section headings
-  const sections = document.querySelectorAll('section');
-  sections.forEach(sec => {
-    const kicker = sec.querySelector('.kicker');
-    const h2 = sec.querySelector('h2');
-    const p = sec.querySelector('p.lead');
-
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: sec,
-        start: 'top 80%',
-        toggleActions: 'play none none none'
-      }
-    });
-
-    if (kicker) timeline.from(kicker, { opacity: 0, y: 20, duration: 0.6, ease: 'power3.out' });
-    if (h2) timeline.from(h2, { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out' }, '-=0.4');
-    if (p) timeline.from(p, { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' }, '-=0.5');
-
-    // Trigger Section Views Analytics
-    ScrollTrigger.create({
-      trigger: sec,
-      start: 'top 50%',
-      end: 'bottom 50%',
-      onEnter: () => {
-        if (sec.id === 'work') {
-          logAnalyticsEvent('showcase_section_view', { section: 'work' });
+  /* ---------------------------------------------------------------
+     12. LEAD MAGNET FORM (demo)
+     --------------------------------------------------------------- */
+  function initLeadForm() {
+    const form = document.querySelector('[data-leadmag-form]');
+    if (!form) return;
+    const success = form.querySelector('[data-leadmag-success]');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input');
+      if (input && input.value) {
+        if (success) {
+          success.hidden = false;
+          input.value = '';
+          setTimeout(() => (success.hidden = true), 4000);
         }
       }
     });
-  });
+  }
 
-  // Problem Cards Reveal
-  gsap.from('.pain-card', {
-    opacity: 0,
-    y: 40,
-    stagger: 0.15,
-    duration: 0.8,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#problem',
-      start: 'top 75%'
-    }
-  });
+  /* ---------------------------------------------------------------
+     INIT
+     --------------------------------------------------------------- */
+  function init() {
+    initCursor();
+    initMagnetic();
+    initNav();
+    initParallax();
+    initCounters();
+    initBeforeAfter();
+    initFAQ();
+    initLeadForm();
+    initReveals();
 
-  // Benefit Bullets Reveal
-  gsap.from('.bullet-item', {
-    opacity: 0,
-    x: -30,
-    stagger: 0.15,
-    duration: 0.8,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#transformation',
-      start: 'top 75%'
-    }
-  });
-
-  // Tech Diagram Node pulse
-  gsap.to('.diagram-node', {
-    scale: 1.3,
-    repeat: -1,
-    yoyo: true,
-    duration: 1.5,
-    stagger: 0.3
-  });
-
-  // Showcase Cards Reveal
-  gsap.from('.showcase-card', {
-    opacity: 0,
-    y: 50,
-    stagger: 0.2,
-    duration: 1,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#work',
-      start: 'top 70%'
-    }
-  });
-
-  // Industry Cards Reveal & View Track
-  gsap.from('.industry-card', {
-    opacity: 0,
-    y: 30,
-    stagger: 0.15,
-    duration: 0.8,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#industries',
-      start: 'top 75%',
-      onEnter: () => {
-        logAnalyticsEvent('industry_card_view', { section: 'industries' });
-      }
-    }
-  });
-
-  // Process Timeline connecting line animation
-  const stepItems = document.querySelectorAll('.process-step-item');
-  stepItems.forEach((item, index) => {
-    ScrollTrigger.create({
-      trigger: item,
-      start: 'top 75%',
-      onEnter: () => {
-        item.classList.add('active-step');
-        gsap.fromTo(item.querySelector('p'), { opacity: 0 }, { opacity: 1, duration: 0.5 });
-      }
+    runPreloader(() => {
+      document.body.classList.add('is-loaded');
+      initLenis();
+      initShowcase();
+      animateHero();
     });
-  });
+  }
 
-  // Add click trackers to showcase cards
-  const cards = document.querySelectorAll('.showcase-card');
-  cards.forEach(card => {
-    card.addEventListener('click', function (e) {
-      const designTitle = this.querySelector('.card-title').innerText.trim();
-      const industry = this.querySelector('.card-industry').innerText.trim();
-      const targetUrl = this.getAttribute('data-url');
-
-      logAnalyticsEvent('showcase_card_click', {
-        section: 'work',
-        design_title: designTitle,
-        industry: industry,
-        target_url: targetUrl
-      });
-    });
-  });
-}
-
-/* --------------------------------------------------------------------------
-   6. Before/After Split Drag Slider
-   -------------------------------------------------------------------------- */
-function initBeforeAfterSlider() {
-  const container = document.getElementById('beforeAfterSlider');
-  const afterPanel = document.getElementById('afterPanel');
-  const handle = document.getElementById('sliderHandle');
-
-  if (!container || !afterPanel || !handle) return;
-
-  // Set initial split variable
-  container.style.setProperty('--slide-percent', '50');
-
-  let isDragging = false;
-
-  const moveSlider = (clientX) => {
-    const rect = container.getBoundingClientRect();
-    let x = clientX - rect.left;
-
-    // Bounds check
-    if (x < 0) x = 0;
-    if (x > rect.width) x = rect.width;
-
-    const percent = (x / rect.width) * 100;
-
-    // Update widths, position, and CSS variable for child image alignment
-    afterPanel.style.width = `${percent}%`;
-    container.style.setProperty('--slide-percent', percent);
-    handle.style.left = `${percent}%`;
-  };
-
-  // Mouse events
-  handle.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    e.preventDefault();
-  });
-
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    moveSlider(e.clientX);
-  });
-
-  // Touch events (mobile support)
-  handle.addEventListener('touchstart', (e) => {
-    isDragging = true;
-  });
-
-  window.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-
-  window.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    if (e.touches.length > 0) {
-      moveSlider(e.touches[0].clientX);
-    }
-  });
-
-  // Click anywhere on container to move slider
-  container.addEventListener('click', (e) => {
-    // Avoid double trigger if clicking handle itself
-    if (e.target === handle || handle.contains(e.target)) return;
-    moveSlider(e.clientX);
-    logAnalyticsEvent('slider_interact', { section: 'before_after', xPosition: e.clientX });
-  });
-}
-
-/* --------------------------------------------------------------------------
-   7. FAQ Accordion Module
-   -------------------------------------------------------------------------- */
-function initFaqAccordion() {
-  const items = document.querySelectorAll('.faq-item');
-
-  items.forEach(item => {
-    const trigger = item.querySelector('.faq-trigger');
-    const content = item.querySelector('.faq-content');
-
-    trigger.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
-
-      // Close other open items
-      items.forEach(otherItem => {
-        if (otherItem !== item && otherItem.classList.contains('active')) {
-          otherItem.classList.remove('active');
-          otherItem.querySelector('.faq-content').style.maxHeight = '0px';
-        }
-      });
-
-      // Toggle current item
-      if (isActive) {
-        item.classList.remove('active');
-        content.style.maxHeight = '0px';
-      } else {
-        item.classList.add('active');
-        content.style.maxHeight = `${content.scrollHeight}px`;
-
-        // Log analytics event
-        const questionText = trigger.querySelector('h3').innerText.trim();
-        logAnalyticsEvent('faq_expand', { section: 'faq', question: questionText });
-      }
-    });
-  });
-}
-
-/* --------------------------------------------------------------------------
-   8. Redesign Consultation Request Form Submission
-   -------------------------------------------------------------------------- */
-function initFormSubmit() {
-  const form = document.getElementById('redesignForm');
-  if (!form) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('formName').value;
-    const url = document.getElementById('formUrl').value;
-    const email = document.getElementById('formEmail').value;
-
-    // Log submission event
-    logAnalyticsEvent('final_cta_click', {
-      section: 'contact',
-      cta_label: 'Submit Request',
-      user_name: name,
-      user_website: url,
-      user_email: email
-    });
-
-    // Visual success feedback
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-
-    submitBtn.innerHTML = 'REQUEST RECEIVED';
-    submitBtn.style.backgroundColor = '#ffffff';
-    submitBtn.style.color = '#07090d';
-    submitBtn.disabled = true;
-
-    // Show visual confirmation modal or overlay in form
-    const formSuccessBox = document.createElement('div');
-    formSuccessBox.className = 'log-entry';
-    formSuccessBox.style.marginTop = '20px';
-    formSuccessBox.style.borderColor = 'var(--accent-lime)';
-    formSuccessBox.innerHTML = `
-      <span style="color: var(--accent-lime); font-weight: bold;">[SUCCESS] Redesign Audit Scheduled!</span><br>
-      <span style="color: var(--text-secondary);">We will review ${url || 'your website'} within 24 hours. Check your inbox: ${email}.</span>
-    `;
-    form.appendChild(formSuccessBox);
-
-    // Reset form after delay
-    setTimeout(() => {
-      form.reset();
-      submitBtn.innerHTML = originalText;
-      submitBtn.style.backgroundColor = '';
-      submitBtn.style.color = '';
-      submitBtn.disabled = false;
-      formSuccessBox.remove();
-    }, 6000);
-  });
-
-  // Secondary CTA "Start Your Redesign" links scrolling to form
-  const startBtns = document.querySelectorAll('.scroll-to-contact');
-  startBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const contactSection = document.getElementById('contact');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-
-        const ctaLabel = btn.innerText.trim();
-        const parentSection = btn.closest('section') ? btn.closest('section').id : 'navbar';
-        logAnalyticsEvent('secondary_audit_cta_click', { section: parentSection, cta_label: ctaLabel });
-      }
-    });
-  });
-}
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
