@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Requirements -->
+  <title>Kodiva Studio | Premium Website Design for Hotels, Villas & Real Estate</title>
+  <meta name="description"
+    content="Explore Kodiva Studio website design concepts for hotels, villas, real estate, and property brands. See latest designs and discover how redesign can improve trust, desire, and inquiries.">
+  <meta name="keywords"
+    content="website design for hotels, villa website design, real estate website design, premium website redesign, property website design, hospitality website design">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Kodiva Studio | Premium Website Design for Hotels, Villas & Real Estate">
+  <meta property="og:description"
+    content="Explore Kodiva Studio website design concepts for hotels, villas, real estate, and property brands. Discover the business impact of high-end design.">
+  <meta property="og:type" content="website">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Grain Overlay Style (DESIGN.md Materiality: 2% micro noise texture) -->
+  <style>
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom Cursor (DESIGN.md: Sleek action-feedback interactive cursor) -->
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <!-- Navigation Bar (PRD Section 12) -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo-link" id="navLogo">
+        <div class="logo-icon">
+          <span
+            style="font-family: var(--font-heading); font-weight: 800; font-size: 14px; color: var(--accent-lime);">K</span>
+        </div>
+        <span class="logo-text">KODIVA STUDIO</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#problem" class="nav-item">Reality Check</a>
+        <a href="#work" class="nav-item">Showcase</a>
+        <a href="#industries" class="nav-item">Industries</a>
+        <a href="#process" class="nav-item">Process</a>
+        <a href="#faq" class="nav-item">FAQ</a>
+      </div>
+
+      <div class="nav-right">
+        <a href="#work" class="btn-lime scroll-to-work" id="navCtaBtn">View Our Designs</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Overlay Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-nav-list">
+      <li><a href="#problem" class="mobile-nav-link">Reality Check</a></li>
+      <li><a href="#work" class="mobile-nav-link">Showcase</a></li>
+      <li><a href="#industries" class="mobile-nav-link">Industries</a></li>
+      <li><a href="#process" class="mobile-nav-link">Process</a></li>
+      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+    </ul>
+    <a href="#contact" class="btn-lime scroll-to-contact" id="mobileMenuCta"
+      style="display: block; text-align: center;">Start Your Redesign</a>
+  </div>
+
+  <!-- Section 01: Hero (PRD Section 01 & DESIGN.md Cover Hero) -->
+  <section class="hero-section" id="hero">
+    <div class="glow-ambient" style="top: -10%; left: -10%;"></div>
+    <div class="glow-ambient glow-cyan" style="bottom: 10%; right: -10%;"></div>
+
+    <div class="container hero-layout">
+      <div class="hero-text-content">
+        <span class="kicker">KODIVA STUDIO WEBSITE DESIGN</span>
+        <h1 class="text-gradient hero-title">Your website should make people want what you sell.</h1>
+        <p class="lead hero-subheadline">
+          Kodiva Studio creates polished, conversion-focused websites for hotels, villas, real estate, and premium
+          businesses that need to look as good online as they do in real life.
+        </p>
+        <div class="hero-ctas">
+          <a href="#work" class="btn-lime scroll-to-work hover-view" id="heroPrimaryCta">View Our Designs</a>
+          <a href="#contact" class="btn-outline scroll-to-contact hover-cta-state" id="heroSecondaryCta">Start Your
+            Redesign</a>
+        </div>
+      </div>
+
+      <!-- Parallax stacked collage of mockups -->
+      <div class="hero-visual" id="heroVisualCollage">
+        <div class="collage-wrapper">
+          <!-- Riverie Mockup -->
+          <div class="collage-item hover-view" style="transform: rotate(-3deg);">
+            <div class="mockup-header">
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+            </div>
+            <img src="showcase/hotel-resort/riverie/ss.png"
+              alt="Riverie Luxury Resort Website Preview">
+          </div>
+          <!-- Nilsson Mockup -->
+          <div class="collage-item hover-view" style="transform: rotate(2deg);">
+            <div class="mockup-header">
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+            </div>
+            <img src="showcase/real-estate/nilsson/ss.png"
+              alt="Nilsson Architectural Studio Website Preview">
+          </div>
+          <!-- Canggu Villa Mockup -->
+          <div class="collage-item hover-view" style="transform: rotate(-1deg);">
+            <div class="mockup-header">
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+            </div>
+            <img
+              src="showcase/hotel-resort/canggu-villa/ss.png"
+              alt="Canggu Villa Stay Website Preview">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 02: Problem / Website Reality Check (PRD Section 02) -->
+  <section class="section-padding" id="problem">
+    <div class="glow-ambient glow-lime" style="bottom: -20%; left: 30%;"></div>
+    <div class="container problem-grid">
+      <div class="problem-sticky">
+        <span class="kicker kicker-lime">01 // THE REALITY CHECK</span>
+        <h2>If your website feels outdated, your brand feels outdated.</h2>
+        <p style="margin-top: 24px; max-width: 450px;">
+          Visitors judge your business before they read your offer. A slow, generic, or dated website can make a
+          beautiful property feel average and a premium service feel forgettable.
+        </p>
+      </div>
+
+      <div class="cards-container">
+        <!-- Card 1 -->
+        <div class="pain-card">
+          <span class="card-num">// 01</span>
+          <h4>Weak first impression</h4>
+          <p>Visitors leave before they understand your value or see the quality of your spaces.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="pain-card">
+          <span class="card-num">// 02</span>
+          <h4>Generic template look</h4>
+          <p>Your brand blends in with cheaper alternatives instead of commanding premium market positioning.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="pain-card">
+          <span class="card-num">// 03</span>
+          <h4>Poor mobile experience</h4>
+          <p>Buyers, investors, and travelers lose patience on small screens due to clunky navigations.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="pain-card">
+          <span class="card-num">// 04</span>
+          <h4>Low inquiry confidence</h4>
+          <p>High-end clients hesitate because the digital representation does not mirror real-world luxury.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 03: Design Transformation (PRD Section 03) -->
+  <section class="section-padding bg-secondary" id="transformation">
+    <div class="container transform-grid">
+      <div>
+        <span class="kicker">02 // THE SOLUTION</span>
+        <h2>A redesign changes how people value your business.</h2>
+        <p style="margin-top: 16px;">
+          Better design sharpens your positioning, improves trust, guides visitors toward action, and makes your offer
+          easier to choose.
+        </p>
+
+        <div class="transform-bullets">
+          <div class="bullet-item">
+            <svg class="bullet-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="bullet-content">
+              <h4>Create stronger first impression</h4>
+              <p>Command attention from the first second with elegant pacing and beautiful typography.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <svg class="bullet-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="bullet-content">
+              <h4>Make premium pricing feel justified</h4>
+              <p>Align your website aesthetic with your actual pricing model to avoid friction during inquiries.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <svg class="bullet-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="bullet-content">
+              <h4>Turn visual quality into trust</h4>
+              <p>Translate the architectural details of your property into structural credibility on screen.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <svg class="bullet-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="bullet-content">
+              <h4>Guide visitors toward action</h4>
+              <p>Eliminate confusion and create direct pathways for booking, inquiring, or scheduling calls.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <svg class="bullet-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="bullet-content">
+              <h4>Make your brand easier to remember</h4>
+              <p>Stand out from the standard grids of competitors with custom interactive storytelling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated abstraction -->
+      <div class="tech-diagram">
+        <div class="diagram-orbit orbit-1">
+          <div class="diagram-node node-1"></div>
+        </div>
+        <div class="diagram-orbit orbit-2">
+          <div class="diagram-node node-2"></div>
+          <div class="diagram-node node-3"></div>
+        </div>
+        <div class="diagram-center">
+          <span
+            style="font-family: var(--font-mono); font-size: 14px; font-weight: bold; color: var(--accent-lime);">UPGRADE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 04: Latest Design Showcase (PRD Section 04 - Cream interruption background) -->
+  <section class="section-padding showcase-section" id="work">
+    <div class="container">
+      <div class="showcase-header">
+        <div>
+          <span class="kicker" style="color: var(--text-dark); opacity: 0.6;">03 // LATEST WORK</span>
+          <h2>Explore our latest website designs.</h2>
+        </div>
+        <p style="color: #4a505c; max-width: 400px; font-size: 15px;">
+          Each Kodiva Studio concept is built to show how design can change the way a brand feels, sells, and converts.
+        </p>
+      </div>
+
+      <div class="showcase-grid">
+        <!-- Item 1: Riverie -->
+        <a href="showcase/hotel-resort/riverie/index.html" class="showcase-card hover-view"
+          data-url="showcase/hotel-resort/riverie/index.html" id="cardRiverie">
+          <div class="card-image-box">
+            <img src="showcase/hotel-resort/riverie/ss.png"
+              alt="Riverie Hotel Website Design Preview">
+          </div>
+          <div class="card-content">
+            <span class="card-industry">Hotel / Resort</span>
+            <h3 class="card-title">Riverie</h3>
+            <p class="card-desc">A calm tropical retreat experience built with editorial pacing, warm visuals, and clear
+              booking intent.</p>
+            <span class="card-link">
+              View Design
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 7H13M13 7L9 3M13 7L9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Item 2: Canggu Villa -->
+        <a href="showcase/hotel-resort/canggu-villa/canggu-villa.html" class="showcase-card hover-view"
+          data-url="showcase/hotel-resort/canggu-villa.html" id="cardCanggu">
+          <div class="card-image-box">
+            <img
+              src="showcase/hotel-resort/canggu-villa/ss.png"
+              alt="Canggu Villa Website Design Preview">
+          </div>
+          <div class="card-content">
+            <span class="card-industry">Villa / Hospitality</span>
+            <h3 class="card-title">Canggu Villa</h3>
+            <p class="card-desc">A destination-led villa page designed to turn atmosphere, location, and stay details
+              into desire.</p>
+            <span class="card-link">
+              View Design
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 7H13M13 7L9 3M13 7L9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Item 3: Nilsson -->
+        <a href="showcase/real-estate/nilsson/index.html" class="showcase-card hover-view"
+          data-url="showcase/real-estate/nilsson/index.html" id="cardNilsson">
+          <div class="card-image-box">
+            <img src="showcase/real-estate/nilsson/ss.png"
+              alt="Nilsson Architectural Real Estate Website Design Preview">
+          </div>
+          <div class="card-content">
+            <span class="card-industry">Real Estate</span>
+            <h3 class="card-title">Nilsson</h3>
+            <p class="card-desc">A real estate design concept focused on premium perception, visual confidence, and
+              property discovery.</p>
+            <span class="card-link">
+              View Design
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 7H13M13 7L9 3M13 7L9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 05: Industry Focus (PRD Section 05) -->
+  <section class="section-padding" id="industries">
+    <div class="glow-ambient glow-cyan" style="top: 10%; right: 5%;"></div>
+    <div class="container">
+      <span class="kicker">04 // INDUSTRIES</span>
+      <h2 style="margin-bottom: 24px;">Built for brands where presentation changes the sale.</h2>
+      <p class="lead" style="max-width: 700px; margin-bottom: 80px;">
+        Some businesses are judged by feeling before features. Hotels, villas, real estate, and premium services need
+        websites that create confidence before the first conversation.
+      </p>
+
+      <div class="industry-grid">
+        <!-- Industry 1 -->
+        <div class="industry-card">
+          <span class="num">01 // HOSPITALITY</span>
+          <h3>Hotels & Resorts</h3>
+          <p>Turn atmosphere and local experiences into direct, premium room bookings.</p>
+        </div>
+        <!-- Industry 2 -->
+        <div class="industry-card">
+          <span class="num">02 // STAY LUXURY</span>
+          <h3>Villas & Stays</h3>
+          <p>Make guests imagine the stay experience and design features before arrival.</p>
+        </div>
+        <!-- Industry 3 -->
+        <div class="industry-card">
+          <span class="num">03 // PREMIUM PROPERTY</span>
+          <h3>Real Estate</h3>
+          <p>Present commercial and residential properties with structural clarity and high-end value.</p>
+        </div>
+        <!-- Industry 4 -->
+        <div class="industry-card">
+          <span class="num">04 // SERVICES</span>
+          <h3>Premium Businesses</h3>
+          <p>Make your digital brand authority match the real-world precision of your execution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 06: Before / After Thinking (PRD Section 06) -->
+  <section class="section-padding" id="comparison">
+    <div class="container">
+      <span class="kicker kicker-lime">05 // PARADIGM SHIFT</span>
+      <h2 style="margin-bottom: 24px;">From forgettable website to premium digital experience.</h2>
+      <p style="max-width: 600px; margin-bottom: 60px;">
+        Use the interactive slider below to compare the impact of standard website layout choices against the bespoke
+        Kodiva Design Architecture.
+      </p>
+
+      <!-- Interactive Drag Slider -->
+      <div class="slider-container" id="beforeAfterSlider">
+        <!-- Before Panel -->
+        <div class="slider-panel panel-before">
+          <img src="img/before.png" alt="Before - Generic Template Website">
+          <!-- Label -->
+          <div
+            style="position: absolute; bottom: 20px; right: 20px; font-family: var(--font-mono); font-size: 11px; color: #ff5252; z-index: 10; background: rgba(7, 9, 13, 0.7); padding: 4px 8px; border-radius: 2px;">
+            BEFORE // TEMPLATE DESIGN</div>
+        </div>
+
+        <!-- After Panel -->
+        <div class="slider-panel panel-after" id="afterPanel">
+          <img src="img/after.png" alt="After - Bespoke Kodiva Redesign">
+          <!-- Label -->
+          <div
+            style="position: absolute; bottom: 20px; left: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--accent-lime); z-index: 10; white-space: nowrap; background: rgba(7, 9, 13, 0.7); padding: 4px 8px; border-radius: 2px;">
+            AFTER // KODIVA BESPOKE</div>
+        </div>
+
+        <!-- Drag Handle Bar -->
+        <div class="slider-handle" id="sliderHandle">
+          <div class="slider-handle-button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before/After Features Comparison Table -->
+      <div style="margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+        <div>
+          <h4
+            style="color: #ff5252; font-family: var(--font-mono); font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;">
+            OUTDATED MODEL</h4>
+          <ul
+            style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: var(--text-muted);">
+            <li>❌ Generic layout structure</li>
+            <li>❌ Weak, feature-led brand story</li>
+            <li>❌ Confusing, multi-level navigation</li>
+            <li>❌ Low visual trust and templates</li>
+            <li>❌ Call to action hidden or unclear</li>
+          </ul>
+        </div>
+        <div>
+          <h4
+            style="color: var(--accent-lime); font-family: var(--font-mono); font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;">
+            KODIVA UPGRADE</h4>
+          <ul
+            style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: var(--text-secondary);">
+            <li>✅ Distinct visual and spatial identity</li>
+            <li>✅ Clear visual hierarchy & conversion paths</li>
+            <li>✅ Premium editorial first impression</li>
+            <li>✅ Fluid, mobile-first experience design</li>
+            <li>✅ Strong, contextual inquiry and booking flow</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 07: Process (PRD Section 07) -->
+  <section class="section-padding" id="process">
+    <div class="container">
+      <span class="kicker">06 // WORKFLOW</span>
+      <h2>Redesign without the guesswork.</h2>
+
+      <div class="process-steps">
+        <!-- Step 1 -->
+        <div class="process-step-item" id="step1">
+          <span class="step-num">01 // AUDIT</span>
+          <h3>Gaps & Gaps</h3>
+          <p>We review your current website, analyze customer behaviors, and locate trust gaps that cost you bookings or
+            leads.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="process-step-item" id="step2">
+          <span class="step-num">02 // DIRECTION</span>
+          <h3>Strategy</h3>
+          <p>We define the visual direction, page structure, conversion flow, and brand voice before code is written.
+          </p>
+        </div>
+        <!-- Step 3 -->
+        <div class="process-step-item" id="step3">
+          <span class="step-num">03 // DESIGN</span>
+          <h3>Execution</h3>
+          <p>Kodiva creates a custom editorial-grade interface that reflects the real-world value of your business.</p>
+        </div>
+        <!-- Step 4 -->
+        <div class="process-step-item" id="step4">
+          <span class="step-num">04 // LAUNCH</span>
+          <h3>Performance</h3>
+          <p>We deploy high-speed, SEO-optimized, responsive pages that are ready to capture traffic and convert
+            inquiries.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 08: Conversion CTA Band (PRD Section 08) -->
+  <section class="section-padding" id="conversion-cta">
+    <div class="container">
+      <div class="conversion-box">
+        <span class="kicker kicker-lime" style="margin-bottom: 16px;">READY TO UPGRADE?</span>
+        <h2 class="text-gradient">Wondering what your website could become?</h2>
+        <p>
+          Start by exploring the showcased design examples. If one connects with what you want your brand to feel like,
+          schedule a digital audit below.
+        </p>
+        <div class="hero-ctas" style="justify-content: center;">
+          <a href="#work" class="btn-lime scroll-to-work hover-view">View Our Designs</a>
+          <a href="#contact" class="btn-outline scroll-to-contact hover-cta-state">Start Your Redesign</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 09: FAQ (PRD Section 09) -->
+  <section class="section-padding" id="faq">
+    <div class="container faq-grid">
+      <div>
+        <span class="kicker">07 // FAQ</span>
+        <h2>Answers to common hesitations.</h2>
+        <p style="margin-top: 24px; max-width: 400px;">
+          Have questions about scope, industry fit, or outcomes? Read our quick breakdown or get in touch for custom
+          details.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <h3>Do I need a full redesign?</h3>
+            <svg class="faq-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="faq-content">
+            <p>Not always. Some websites need a complete rebuild from scratch. Others only require sharper visual
+              layouts, cleaner mobile alignment, stronger copy, or simplified navigation. Our initial audit defines what
+              will move the needle fastest for your business.</p>
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <h3>Can you design for hotels, villas, and real estate?</h3>
+            <svg class="faq-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="faq-content">
+            <p>Yes. These are our current primary focus categories because they represent industries where presentation,
+              mood, and visual authority directly determine bookings, property value perception, and inbound customer
+              confidence.</p>
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <h3>Will the website only look better, or also convert better?</h3>
+            <svg class="faq-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="faq-content">
+            <p>The goal is always both. While high-end imagery and elegant pacing make your brand desirable, the
+              structural wireframe, page load speed, and call-to-action systems are built strictly to guide users
+              towards inquiries, emails, or bookings.</p>
+          </div>
+        </div>
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <h3>Can I view existing design examples first?</h3>
+            <svg class="faq-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="faq-content">
+            <p>Yes. The Work section links directly to live design preview pages, allowing you to browse real concepts
+              built for our target industries.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="container">
+    <div class="hairline"></div>
+  </div>
+
+  <!-- Section 10: Final CTA & Form (PRD Section 10) -->
+  <section class="section-padding contact-section" id="contact">
+    <div class="glow-ambient glow-lime" style="bottom: -10%; left: -20%;"></div>
+    <div class="container contact-grid">
+      <div>
+        <span class="kicker kicker-lime">08 // ENGAGE</span>
+        <h2>Make your website feel worth choosing.</h2>
+        <p style="margin-top: 24px; max-width: 450px; color: var(--text-secondary);">
+          Your website is often the first version of your business people experience. Make it clear, premium, and
+          persuasive.
+        </p>
+        <p style="margin-top: 16px; color: var(--text-muted); font-size: 14px;">
+          Submit your current URL and details below. We'll audit your positioning and outline optimization options.
+        </p>
+      </div>
+
+      <div>
+        <form class="contact-form" id="redesignForm">
+          <div class="form-group">
+            <label for="formName">Full Name</label>
+            <input type="text" class="form-input" id="formName" placeholder="e.g. Alexander Nilsson" required>
+          </div>
+          <div class="form-group">
+            <label for="formUrl">Current Website URL</label>
+            <input type="url" class="form-input" id="formUrl" placeholder="e.g. https://myresort.com" required>
+          </div>
+          <div class="form-group">
+            <label for="formEmail">Email Address</label>
+            <input type="email" class="form-input" id="formEmail" placeholder="e.g. alexander@myresort.com" required>
+          </div>
+          <div class="form-group">
+            <label for="formMessage">Primary Redesign Goals</label>
+            <textarea class="form-input" id="formMessage" rows="4"
+              placeholder="Describe what you want to achieve (e.g. improve luxury perception, capture more mobile bookings)"></textarea>
+          </div>
+          <button type="submit" class="btn-lime hover-cta-state" style="align-self: flex-start; padding: 16px 36px;"
+            id="formSubmitBtn">Request Audit Report</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (DESIGN.md: Footer Knowledge Layer) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <span class="logo-text" style="font-size: 14px; letter-spacing: 0.15em;">KODIVA STUDIO</span>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 16px; max-width: 240px;">
+            Future-ready websites bridging brand aesthetic with conversion engineering.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>EXPLORE</h4>
+          <ul class="footer-links">
+            <li><a href="#work">Showcase Designs</a></li>
+            <li><a href="#problem">Reality Check</a></li>
+            <li><a href="#industries">Industries</a></li>
+            <li><a href="#process">Bespoke Process</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>SHOWCASE PREVIEWS</h4>
+          <ul class="footer-links" style="font-family: var(--font-mono); font-size: 12px;">
+            <li><a href="showcase/hotel-resort/riverie/index.html">01 // RIVERIE RESORT</a></li>
+            <li><a href="showcase/hotel-resort/canggu-villa/canggu-villa.html">02 // CANGGU VILLA</a></li>
+            <li><a href="showcase/real-estate/nilsson/index.html">03 // NILSSON STUDIO</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>SPECIFICATIONS</h4>
+          <p style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); line-height: 1.8;">
+            Core: HTML5 / CSS3 / Vanilla JS<br>
+            Motion: GreenSock Engine<br>
+            Design: Swiss-Tech Editorial<br>
+            Contrast: WCAG 2.2 AA Compliance
+          </p>
+        </div>
+      </div>
+
+      <div class="hairline" style="margin-bottom: 40px;"></div>
+
+      <div class="footer-bottom">
+        <span>© 2026 KODIVA STUDIO. ALL RIGHTS RESERVED.</span>
+        <span>COORDINATES // 8.4095° S, 115.1889° E (BALI)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Technical Analytics Console HUD drawer (Scientific Editorial Futurism element) -->
+  <div class="analytics-drawer minimized" id="analyticsDrawer">
+    <div class="analytics-header" id="analyticsHeader">
+      <div class="analytics-title">
+        <span class="analytics-status"></span>
+        <span>ANALYTICS CONSOLE</span>
+      </div>
+      <div class="analytics-toggle-icon">▲</div>
+    </div>
+    <div class="analytics-body" id="analyticsLogsContainer">
+      <!-- Event logs appended here in real-time -->
+    </div>
+  </div>
+
+  <!-- JavaScript Modules (GSAP Core & ScrollTrigger CDN + Local Script) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>

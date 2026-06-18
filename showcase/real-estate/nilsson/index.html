@@ -1,0 +1,1241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NILSSON — Architectural Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'warm-white': '#F6F5F2',
+                        'arch-white': '#FFFFFF',
+                        'graphite': '#111111',
+                        'concrete': '#8D8D8D',
+                        'soft-stone': '#D9D7D3',
+                        'forest': '#627257',
+                        'sky-blue': '#C9D7E0',
+                        'warm-sand': '#D8C4A8',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'SF Mono', 'monospace'],
+                    },
+                    letterSpacing: {
+                        'editorial': '0.12em',
+                        'tight-custom': '-0.02em',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F6F5F2;
+            color: #111111;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F6F5F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9D7D3;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8D8D8D;
+        }
+
+        /* Typography */
+        .heading-xl {
+            font-size: clamp(48px, 6vw, 96px);
+            font-weight: 400;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+        }
+
+        .heading-lg {
+            font-size: clamp(36px, 4vw, 64px);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .heading-md {
+            font-size: clamp(24px, 2.5vw, 40px);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .subheading {
+            font-size: clamp(16px, 1.4vw, 22px);
+            font-weight: 400;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .body-text {
+            font-size: clamp(14px, 1.1vw, 17px);
+            font-weight: 400;
+            line-height: 1.7;
+            color: #8D8D8D;
+        }
+
+        .caption {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #8D8D8D;
+        }
+
+        .data-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #8D8D8D;
+        }
+
+        /* Hairline divider */
+        .hairline {
+            height: 1px;
+            background-color: #D9D7D3;
+            width: 100%;
+        }
+
+        /* Image treatment */
+        .arch-image {
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .arch-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .arch-image:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #111111;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero overlay gradient */
+        .hero-overlay {
+            background: linear-gradient(
+                to bottom,
+                rgba(17, 17, 17, 0.1) 0%,
+                rgba(17, 17, 17, 0.3) 50%,
+                rgba(17, 17, 17, 0.6) 100%
+            );
+        }
+
+        /* Project card hover */
+        .project-card {
+            cursor: pointer;
+        }
+
+        .project-card .project-title {
+            transition: color 0.3s ease;
+        }
+
+        .project-card:hover .project-title {
+            color: #627257;
+        }
+
+        /* Stat number */
+        .stat-number {
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: #111111;
+        }
+
+        /* Button style */
+        .btn-arch {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            border: 1px solid #111111;
+            background: transparent;
+            color: #111111;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .btn-arch:hover {
+            background: #111111;
+            color: #F6F5F2;
+        }
+
+        /* Tag */
+        .tag {
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid #D9D7D3;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #8D8D8D;
+        }
+
+        /* Reveal animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+        }
+
+        /* Hero parallax container */
+        .hero-container {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
+            will-change: transform;
+        }
+
+        /* Grid overlay for visual reference (subtle) */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1440px;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .grid-overlay.active {
+            opacity: 1;
+        }
+
+        .grid-line {
+            position: absolute;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            background: rgba(17, 17, 17, 0.05);
+        }
+
+        /* Smooth section transitions */
+        section {
+            position: relative;
+        }
+
+        /* Philosophy quote mark */
+        .quote-mark {
+            font-size: 120px;
+            line-height: 1;
+            color: #D9D7D3;
+            font-family: Georgia, serif;
+            position: absolute;
+            top: -40px;
+            left: -20px;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #F6F5F2;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu a {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            color: #111111;
+            text-decoration: none;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            width: 24px;
+            height: 14px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #111111;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .hamburger span:nth-child(3) { bottom: 0; }
+
+        .hamburger.active span:nth-child(1) {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+        }
+
+        /* Footer link hover */
+        .footer-link {
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #111111;
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        /* Image loading state */
+        .image-placeholder {
+            background: linear-gradient(135deg, #E8E6E3 0%, #D9D7D3 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Custom selection */
+        ::selection {
+            background: #627257;
+            color: #F6F5F2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .heading-xl {
+                font-size: 36px;
+            }
+            .heading-lg {
+                font-size: 28px;
+            }
+            .stat-number {
+                font-size: 40px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="flex items-center justify-between h-20 md:h-24">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3">
+                    <div class="w-8 h-8 border border-current flex items-center justify-center">
+                        <span class="text-xs font-mono font-medium">N</span>
+                    </div>
+                    <span class="text-sm font-medium tracking-editorial uppercase hidden md:block">Nilsson</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="#philosophy" class="nav-link text-xs tracking-editorial uppercase text-graphite">Philosophy</a>
+                    <a href="#projects" class="nav-link text-xs tracking-editorial uppercase text-graphite">Projects</a>
+                    <a href="#studio" class="nav-link text-xs tracking-editorial uppercase text-graphite">Studio</a>
+                    <a href="#contact" class="nav-link text-xs tracking-editorial uppercase text-graphite">Contact</a>
+                </div>
+
+                <!-- Mobile Hamburger -->
+                <div class="hamburger md:hidden" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu md:hidden" id="mobileMenu">
+        <a href="#philosophy" class="mobile-link">Philosophy</a>
+        <a href="#projects" class="mobile-link">Projects</a>
+        <a href="#studio" class="mobile-link">Studio</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-container" id="hero">
+        <img 
+            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80" 
+            alt="Modern architectural residence with clean geometric forms"
+            class="hero-bg"
+            id="heroImage"
+        >
+        <div class="hero-overlay absolute inset-0"></div>
+
+        <div class="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-12 lg:px-20">
+            <div class="max-w-[1440px] mx-auto w-full">
+                <div class="max-w-3xl">
+                    <p class="caption text-white/70 mb-6 reveal" id="heroCaption">Est. 2008 — Stockholm / Copenhagen</p>
+                    <h1 class="heading-xl text-white mb-8 reveal" id="heroTitle">
+                        Crafting the<br>Future
+                    </h1>
+                    <p class="subheading text-white/80 max-w-xl mb-10 reveal" id="heroSub">
+                        Architecture that transcends the present moment. We design environments that will feel as relevant in twenty years as they do today.
+                    </p>
+                    <div class="flex items-center gap-8 reveal" id="heroCta">
+                        <a href="#projects" class="btn-arch border-white text-white hover:bg-white hover:text-graphite">
+                            View Selected Work
+                        </a>
+                        <span class="data-text text-white/50">Scroll to explore</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero metadata strip -->
+        <div class="absolute bottom-0 left-0 right-0 border-t border-white/10">
+            <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="hidden md:flex items-center gap-8">
+                        <span class="data-text text-white/40">59.3293° N, 18.0686° E</span>
+                        <span class="data-text text-white/40">CET +1</span>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="data-text text-white/40">Residential</span>
+                        <span class="data-text text-white/40">Commercial</span>
+                        <span class="data-text text-white/40">Cultural</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="py-24 md:py-40 lg:py-48 bg-warm-white">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <!-- Left Column -->
+                <div class="lg:col-span-5 relative">
+                    <span class="quote-mark">"</span>
+                    <h2 class="heading-lg text-graphite mb-8 reveal" id="philTitle">
+                        Shaping Future Architecture
+                    </h2>
+                    <p class="body-text mb-6 reveal" id="philBody1">
+                        At Nilsson, we believe architecture is the most permanent form of cultural expression. Every structure we design is conceived not merely as a building, but as a contribution to the urban and natural landscape that will endure for generations.
+                    </p>
+                    <p class="body-text reveal" id="philBody2">
+                        Our practice is rooted in the Scandinavian tradition of material honesty and spatial clarity, informed by the rigorous discipline of Swiss modernism and the quiet confidence of Japanese spatial minimalism.
+                    </p>
+                </div>
+
+                <!-- Right Column -->
+                <div class="lg:col-span-7 lg:pt-16">
+                    <div class="arch-image aspect-[4/3] mb-8 reveal" id="philImage">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" 
+                            alt="Minimalist interior with natural light and concrete surfaces"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="reveal" id="philStat1">
+                            <span class="data-text block mb-2">Founded</span>
+                            <span class="text-2xl font-light text-graphite">2008</span>
+                        </div>
+                        <div class="reveal" id="philStat2">
+                            <span class="data-text block mb-2">Projects</span>
+                            <span class="text-2xl font-light text-graphite">127</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+        <div class="hairline"></div>
+    </div>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 md:py-40 lg:py-48 bg-warm-white">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-16 md:mb-24">
+                <div>
+                    <span class="caption block mb-4 reveal">Selected Work</span>
+                    <h2 class="heading-lg text-graphite reveal">Projects</h2>
+                </div>
+                <p class="body-text max-w-md mt-6 md:mt-0 reveal">
+                    A curated selection of our most significant work, spanning residential, commercial, and cultural commissions across Northern Europe.
+                </p>
+            </div>
+
+            <!-- Project Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+                <!-- Featured Project (Large) -->
+                <div class="lg:col-span-7 project-card reveal" id="project1">
+                    <div class="arch-image aspect-[3/4] mb-6">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1000&q=80" 
+                            alt="Villa Skagen — Minimalist white concrete residence"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="project-title text-xl font-light text-graphite mb-2">Villa Skagen</h3>
+                            <p class="data-text">Residential — Skagen, Denmark</p>
+                        </div>
+                        <span class="data-text">2023</span>
+                    </div>
+                </div>
+
+                <!-- Supporting Project 1 -->
+                <div class="lg:col-span-5 lg:pt-24 project-card reveal" id="project2">
+                    <div class="arch-image aspect-[4/3] mb-6">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1000&q=80" 
+                            alt="Nordic Glass House — Contemporary glass and wood residence"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="project-title text-xl font-light text-graphite mb-2">Nordic Glass House</h3>
+                            <p class="data-text">Residential — Oslo, Norway</p>
+                        </div>
+                        <span class="data-text">2022</span>
+                    </div>
+                </div>
+
+                <!-- Supporting Project 2 -->
+                <div class="lg:col-span-5 project-card reveal" id="project3">
+                    <div class="arch-image aspect-[4/3] mb-6">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1000&q=80" 
+                            alt="Concrete Pavilion — Minimalist concrete and glass structure"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="project-title text-xl font-light text-graphite mb-2">Concrete Pavilion</h3>
+                            <p class="data-text">Cultural — Gothenburg, Sweden</p>
+                        </div>
+                        <span class="data-text">2021</span>
+                    </div>
+                </div>
+
+                <!-- Supporting Project 3 -->
+                <div class="lg:col-span-7 lg:-mt-32 project-card reveal" id="project4">
+                    <div class="arch-image aspect-[16/10] mb-6">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=1200&q=80" 
+                            alt="Forest Retreat — Modern architecture integrated with nature"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="project-title text-xl font-light text-graphite mb-2">Forest Retreat</h3>
+                            <p class="data-text">Residential — Järna, Sweden</p>
+                        </div>
+                        <span class="data-text">2020</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View All Link -->
+            <div class="mt-16 md:mt-24 text-center reveal">
+                <a href="#" class="btn-arch">
+                    View All Projects
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+        <div class="hairline"></div>
+    </div>
+
+    <!-- Studio / Statistics Section -->
+    <section id="studio" class="py-24 md:py-40 lg:py-48 bg-warm-white">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <!-- Left: Text Content -->
+                <div class="lg:col-span-5">
+                    <span class="caption block mb-4 reveal">The Studio</span>
+                    <h2 class="heading-lg text-graphite mb-8 reveal">Precision in Every Detail</h2>
+                    <p class="body-text mb-6 reveal">
+                        Nilsson is an architecture and design studio operating at the intersection of Scandinavian minimalism and Swiss precision. Founded in Stockholm in 2008, we have grown to a team of 24 architects, designers, and visualizers working across Northern Europe.
+                    </p>
+                    <p class="body-text mb-10 reveal">
+                        Our process is collaborative and research-driven. We begin each project with an intensive study of context—geographic, cultural, and material—before a single line is drawn.
+                    </p>
+                    <div class="flex flex-wrap gap-3 reveal">
+                        <span class="tag">Architecture</span>
+                        <span class="tag">Interior Design</span>
+                        <span class="tag">Urban Planning</span>
+                        <span class="tag">Visualization</span>
+                    </div>
+                </div>
+
+                <!-- Right: Statistics -->
+                <div class="lg:col-span-7">
+                    <div class="grid grid-cols-2 gap-8 md:gap-12">
+                        <div class="reveal" id="stat1">
+                            <span class="stat-number" data-count="16">0</span>
+                            <span class="stat-number">+</span>
+                            <p class="data-text mt-4">Years of Practice</p>
+                        </div>
+                        <div class="reveal" id="stat2">
+                            <span class="stat-number" data-count="127">0</span>
+                            <p class="data-text mt-4">Completed Projects</p>
+                        </div>
+                        <div class="reveal" id="stat3">
+                            <span class="stat-number" data-count="24">0</span>
+                            <p class="data-text mt-4">Team Members</p>
+                        </div>
+                        <div class="reveal" id="stat4">
+                            <span class="stat-number" data-count="12">0</span>
+                            <p class="data-text mt-4">Design Awards</p>
+                        </div>
+                    </div>
+
+                    <!-- Studio Image -->
+                    <div class="arch-image aspect-[16/9] mt-12 reveal" id="studioImage">
+                        <img 
+                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80" 
+                            alt="Nilsson studio workspace with natural light"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+        <div class="hairline"></div>
+    </div>
+
+    <!-- Case Study / Featured Project Deep Dive -->
+    <section class="py-24 md:py-40 lg:py-48 bg-warm-white">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <!-- Left: Images -->
+                <div class="lg:col-span-7">
+                    <div class="arch-image aspect-[4/3] mb-6 reveal" id="caseImage1">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&q=80" 
+                            alt="Villa Skagen exterior detail"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="arch-image aspect-[3/4] reveal" id="caseImage2">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80" 
+                                alt="Interior detail with natural materials"
+                                loading="lazy"
+                            >
+                        </div>
+                        <div class="arch-image aspect-[3/4] reveal" id="caseImage3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80" 
+                                alt="Landscape integration"
+                                loading="lazy"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Narrative -->
+                <div class="lg:col-span-5 lg:pt-12">
+                    <span class="caption block mb-4 reveal">Case Study</span>
+                    <h2 class="heading-md text-graphite mb-6 reveal">Villa Skagen</h2>
+                    <div class="mb-8 reveal">
+                        <span class="data-text block mb-1">Location</span>
+                        <span class="text-graphite">Skagen, Denmark</span>
+                    </div>
+                    <div class="mb-8 reveal">
+                        <span class="data-text block mb-1">Year</span>
+                        <span class="text-graphite">2023</span>
+                    </div>
+                    <div class="mb-8 reveal">
+                        <span class="data-text block mb-1">Area</span>
+                        <span class="text-graphite">420 m²</span>
+                    </div>
+                    <p class="body-text mb-6 reveal">
+                        Situated at the northernmost tip of Denmark where the North Sea meets the Baltic, Villa Skagen responds to one of Europe's most dramatic coastal landscapes with quiet confidence.
+                    </p>
+                    <p class="body-text mb-6 reveal">
+                        The residence is conceived as a series of interlocking concrete volumes that appear to emerge from the dunes themselves. Large-scale glazing frames views of the ever-changing sea, while the interior material palette—white oak, limestone, and polished concrete—creates a warm counterpoint to the harsh maritime climate.
+                    </p>
+                    <p class="body-text mb-10 reveal">
+                        The project represents our commitment to architecture that respects its context while pushing the boundaries of what is structurally and spatially possible.
+                    </p>
+                    <a href="#" class="btn-arch reveal">
+                        Read Full Case Study
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Closing / Manifesto Section -->
+    <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+        <img 
+            src="https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?w=1920&q=80" 
+            alt="Architectural landscape at dusk"
+            class="absolute inset-0 w-full h-full object-cover"
+            id="closingImage"
+        >
+        <div class="absolute inset-0 bg-graphite/60"></div>
+
+        <div class="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 text-center">
+            <p class="caption text-white/60 mb-8 reveal">Manifesto</p>
+            <h2 class="heading-lg text-white max-w-4xl mx-auto mb-10 reveal">
+                We do not design for the present.<br>We design for permanence.
+            </h2>
+            <p class="subheading text-white/70 max-w-2xl mx-auto mb-12 reveal">
+                Every structure we create is a statement of belief in the enduring power of thoughtful design. Architecture that outlives trends, transcends fashion, and speaks to something fundamentally human.
+            </p>
+            <a href="#contact" class="btn-arch border-white text-white hover:bg-white hover:text-graphite reveal">
+                Start a Conversation
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-40 lg:py-48 bg-warm-white">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <!-- Left: Contact Info -->
+                <div class="lg:col-span-5">
+                    <span class="caption block mb-4 reveal">Contact</span>
+                    <h2 class="heading-lg text-graphite mb-8 reveal">Let's Build Something Permanent</h2>
+                    <p class="body-text mb-12 reveal">
+                        Whether you have a specific project in mind or simply wish to explore the possibilities, we welcome the conversation. Every great building begins with a single dialogue.
+                    </p>
+
+                    <div class="space-y-8">
+                        <div class="reveal">
+                            <span class="data-text block mb-2">Stockholm Studio</span>
+                            <p class="text-graphite">Birger Jarlsgatan 58</p>
+                            <p class="text-graphite">114 29 Stockholm, Sweden</p>
+                        </div>
+                        <div class="reveal">
+                            <span class="data-text block mb-2">Copenhagen Studio</span>
+                            <p class="text-graphite">Bredgade 42</p>
+                            <p class="text-graphite">1260 Copenhagen, Denmark</p>
+                        </div>
+                        <div class="reveal">
+                            <span class="data-text block mb-2">Email</span>
+                            <a href="mailto:studio@nilsson.se" class="footer-link text-graphite">studio@nilsson.se</a>
+                        </div>
+                        <div class="reveal">
+                            <span class="data-text block mb-2">Phone</span>
+                            <a href="tel:+4685550123" class="footer-link text-graphite">+46 8 555 01 23</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Contact Form -->
+                <div class="lg:col-span-7 lg:pt-8">
+                    <form class="space-y-8 reveal" id="contactForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <label class="caption block mb-3">Name</label>
+                                <input 
+                                    type="text" 
+                                    class="w-full bg-transparent border-b border-soft-stone py-3 text-graphite focus:outline-none focus:border-graphite transition-colors"
+                                    placeholder="Your name"
+                                >
+                            </div>
+                            <div>
+                                <label class="caption block mb-3">Email</label>
+                                <input 
+                                    type="email" 
+                                    class="w-full bg-transparent border-b border-soft-stone py-3 text-graphite focus:outline-none focus:border-graphite transition-colors"
+                                    placeholder="your@email.com"
+                                >
+                            </div>
+                        </div>
+                        <div>
+                            <label class="caption block mb-3">Project Type</label>
+                            <select class="w-full bg-transparent border-b border-soft-stone py-3 text-graphite focus:outline-none focus:border-graphite transition-colors appearance-none cursor-pointer">
+                                <option value="">Select project type</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="cultural">Cultural</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="caption block mb-3">Message</label>
+                            <textarea 
+                                rows="4"
+                                class="w-full bg-transparent border-b border-soft-stone py-3 text-graphite focus:outline-none focus:border-graphite transition-colors resize-none"
+                                placeholder="Tell us about your vision..."
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="btn-arch">
+                            Send Message
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-graphite text-white py-16 md:py-20">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
+                <!-- Brand -->
+                <div class="md:col-span-4">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 border border-white/30 flex items-center justify-center">
+                            <span class="text-xs font-mono">N</span>
+                        </div>
+                        <span class="text-sm font-medium tracking-editorial uppercase">Nilsson</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-xs">
+                        Architecture studio crafting environments of permanence and precision since 2008.
+                    </p>
+                </div>
+
+                <!-- Navigation -->
+                <div class="md:col-span-2 md:col-start-6">
+                    <span class="caption text-white/40 block mb-6">Navigation</span>
+                    <div class="space-y-3">
+                        <a href="#philosophy" class="block text-sm text-white/70 hover:text-white transition-colors">Philosophy</a>
+                        <a href="#projects" class="block text-sm text-white/70 hover:text-white transition-colors">Projects</a>
+                        <a href="#studio" class="block text-sm text-white/70 hover:text-white transition-colors">Studio</a>
+                        <a href="#contact" class="block text-sm text-white/70 hover:text-white transition-colors">Contact</a>
+                    </div>
+                </div>
+
+                <!-- Social -->
+                <div class="md:col-span-2">
+                    <span class="caption text-white/40 block mb-6">Connect</span>
+                    <div class="space-y-3">
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">LinkedIn</a>
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">ArchDaily</a>
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">Dezeen</a>
+                    </div>
+                </div>
+
+                <!-- Legal -->
+                <div class="md:col-span-2">
+                    <span class="caption text-white/40 block mb-6">Legal</span>
+                    <div class="space-y-3">
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">Privacy</a>
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">Terms</a>
+                        <a href="#" class="block text-sm text-white/70 hover:text-white transition-colors">Cookies</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="hairline bg-white/10 mb-8"></div>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <span class="data-text text-white/40">© 2024 Nilsson Architecture Studio. All rights reserved.</span>
+                <span class="data-text text-white/40">Designed with precision in Stockholm</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Grid Overlay (for design reference - toggle with 'G' key) -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-line" style="left: 8.33%"></div>
+        <div class="grid-line" style="left: 16.66%"></div>
+        <div class="grid-line" style="left: 25%"></div>
+        <div class="grid-line" style="left: 33.33%"></div>
+        <div class="grid-line" style="left: 41.66%"></div>
+        <div class="grid-line" style="left: 50%"></div>
+        <div class="grid-line" style="left: 58.33%"></div>
+        <div class="grid-line" style="left: 66.66%"></div>
+        <div class="grid-line" style="left: 75%"></div>
+        <div class="grid-line" style="left: 83.33%"></div>
+        <div class="grid-line" style="left: 91.66%"></div>
+    </div>
+
+    <script>
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar scroll behavior
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.style.background = 'rgba(246, 245, 242, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.borderBottom = '1px solid rgba(217, 215, 211, 0.5)';
+            } else {
+                navbar.style.background = 'transparent';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.borderBottom = 'none';
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Hero parallax
+        gsap.to('#heroImage', {
+            yPercent: 20,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Hero text animations
+        gsap.to('#heroCaption', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        gsap.to('#heroTitle', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        gsap.to('#heroSub', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.7,
+            ease: 'power3.out'
+        });
+
+        gsap.to('#heroCta', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.9,
+            ease: 'power3.out'
+        });
+
+        // Reveal animations for all sections
+        const revealElements = document.querySelectorAll('.reveal');
+
+        revealElements.forEach((el, index) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                x: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        });
+
+        // Statistics counter animation
+        const statNumbers = document.querySelectorAll('.stat-number[data-count]');
+
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+
+            ScrollTrigger.create({
+                trigger: stat,
+                start: 'top 80%',
+                onEnter: () => {
+                    gsap.to(stat, {
+                        innerText: target,
+                        duration: 2,
+                        snap: { innerText: 1 },
+                        ease: 'power2.out'
+                    });
+                },
+                once: true
+            });
+        });
+
+        // Image parallax for project cards
+        const projectImages = document.querySelectorAll('.project-card .arch-image img');
+
+        projectImages.forEach(img => {
+            gsap.to(img, {
+                yPercent: -8,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: img.closest('.arch-image'),
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Grid overlay toggle (press 'G' key)
+        const gridOverlay = document.getElementById('gridOverlay');
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'g' || e.key === 'G') {
+                gridOverlay.classList.toggle('active');
+            }
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Show success message
+            const btn = contactForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Message Sent';
+            btn.style.background = '#627257';
+            btn.style.borderColor = '#627257';
+            btn.style.color = '#F6F5F2';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+                btn.style.borderColor = '';
+                btn.style.color = '';
+                contactForm.reset();
+            }, 3000);
+        });
+
+        // Closing image parallax
+        gsap.to('#closingImage', {
+            yPercent: 15,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#closingImage',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Philosophy image parallax
+        gsap.to('#philImage img', {
+            yPercent: -10,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#philImage',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Studio image parallax
+        gsap.to('#studioImage img', {
+            yPercent: -8,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#studioImage',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Case study images parallax
+        gsap.to('#caseImage1 img', {
+            yPercent: -6,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#caseImage1',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Initialize reveal elements
+        document.querySelectorAll('.reveal').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+        });
+
+        // Hero elements initial state
+        document.querySelectorAll('#hero .reveal').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+        });
+    </script>
+</body>
+</html>

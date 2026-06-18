@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-03T15:11:46Z",
+  "title": "Design System: Riverie",
+  "extensions": {
+    "colorMeta": {
+      "coconut-white": {
+        "role": "neutral",
+        "displayName": "Coconut White",
+        "canonical": "oklch(98.7% 0.002 85)",
+        "tonalRamp": ["#1b1a19", "#353432", "#575654", "#807e7b", "#a9a7a3", "#cfccc7", "#ededea", "#fcfbf9"]
+      },
+      "limestone": {
+        "role": "neutral",
+        "displayName": "Limestone",
+        "canonical": "oklch(90.0% 0.008 85)",
+        "tonalRamp": ["#252422", "#474541", "#6f6c67", "#98948d", "#beb9b2", "#ded9d2", "#e6e2d8", "#faf6ef"]
+      },
+      "warm-sand": {
+        "role": "neutral",
+        "displayName": "Warm Sand",
+        "canonical": "oklch(77.5% 0.025 82)",
+        "tonalRamp": ["#28241d", "#4c4437", "#736855", "#9c8e76", "#c0b298", "#c8bba6", "#e4dac9", "#f6f1ea"]
+      },
+      "teak-brown": {
+        "role": "secondary",
+        "displayName": "Teak Brown",
+        "canonical": "oklch(46.5% 0.115 65)",
+        "tonalRamp": ["#4a2f15", "#6a4520", "#8b5a2b", "#ac743d", "#cd8f51", "#e6ad70", "#f5ce9b", "#fbeacc"]
+      },
+      "espresso": {
+        "role": "primary",
+        "displayName": "Espresso",
+        "canonical": "oklch(18.5% 0.012 65)",
+        "tonalRamp": ["#161310", "#2b251f", "#443a32", "#5e5145", "#7a6a5b", "#988674", "#b9a795", "#dcd0c2"]
+      },
+      "palm-green": {
+        "role": "accent",
+        "displayName": "Palm Green",
+        "canonical": "oklch(26.5% 0.032 145)",
+        "tonalRamp": ["#131a13", "#232e23", "#2f3e2f", "#435943", "#5c795c", "#7b9b7b", "#9fbf9f", "#cbe1cb"]
+      },
+      "pool-blue": {
+        "role": "accent",
+        "displayName": "Pool Blue",
+        "canonical": "oklch(56.5% 0.052 220)",
+        "tonalRamp": ["#192c32", "#2d4d57", "#437280", "#5c8a97", "#7ba8b5", "#9fc7d2", "#cce6ed", "#ebf6f9"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Large brand display marks."
+      },
+      "hero": {
+        "displayName": "Hero",
+        "purpose": "Primary page headlines above the fold."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section introduction statements."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Room names, card headings, and sub-sections."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptive paragraphs and main copy."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Captions, metadata, and fine print."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Navigation links, buttons, and section kickers."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "reveal-fade",
+        "value": "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Soft fade-in for scroll entrance animations."
+      },
+      {
+        "name": "transition-standard",
+        "value": "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Standard interactive transitions (hovers, focus states)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1440px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action button, used for direct conversion points like booking check availability.",
+      "html": "<button class=\"ds-btn-primary\">BOOK NOW</button>",
+      "css": ".ds-btn-primary { font-family: 'Manrope', system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #FCFBF9; background-color: #2B251F; border: none; border-radius: 0px; padding: 16px 32px; cursor: pointer; transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background-color: #8B5A2B; } .ds-btn-primary:focus-visible { outline: 2px solid #5C8A97; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action button, used for secondary paths like exploring sections or details.",
+      "html": "<button class=\"ds-btn-secondary\">EXPLORE THE RETREAT</button>",
+      "css": ".ds-btn-secondary { font-family: 'Manrope', system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #2B251F; background-color: transparent; border: 1px solid #2B251F; border-radius: 0px; padding: 16px 32px; cursor: pointer; transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-secondary:hover { background-color: #2B251F; color: #FCFBF9; } .ds-btn-secondary:focus-visible { outline: 2px solid #5C8A97; outline-offset: 2px; }"
+    },
+    {
+      "name": "Room Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Room and suite presentation card displaying key details and action.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-img-placeholder\"></div><div class=\"ds-card-content\"><h3 class=\"ds-card-title\">River View Suite</h3><p class=\"ds-card-text\">Wake to soft light and quiet views, with a calm room designed for slow mornings and restful evenings.</p><div class=\"ds-card-details\"><span>King Bed</span><span> • </span><span>Sleeps 2</span></div><button class=\"ds-btn-secondary ds-card-cta\">VIEW DETAILS</button></div></div>",
+      "css": ".ds-card { background-color: #FCFBF9; border: 1px solid #E6E2D8; border-radius: 0px; padding: 40px; display: flex; flex-direction: column; gap: 24px; max-width: 400px; text-align: left; } .ds-card-img-placeholder { width: 100%; aspect-ratio: 4/3; background-color: #E6E2D8; } .ds-card-content { display: flex; flex-direction: column; gap: 12px; } .ds-card-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; font-weight: 400; color: #2B251F; margin: 0; } .ds-card-text { font-family: 'Manrope', system-ui, sans-serif; font-size: 0.875rem; line-height: 1.6; color: #2B251F; opacity: 0.8; margin: 0; } .ds-card-details { font-family: 'Manrope', system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #8B5A2B; margin-bottom: 8px; } .ds-card-cta { width: 100%; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Slow Tropical Sanctuary",
+    "overview": "Riverie’s website should feel like entering a modern tropical retreat before arriving in Bali. The interface translates the property’s open-air architecture, pool reflections, palm shadows, teak details, soft limestone surfaces, linen textures, and quiet communal spaces into a calm editorial digital experience.\n\nThe design system communicates quiet luxury through restraint, warm materiality, generous breathing room, and practical clarity. It should not feel raw, cold, or severe. It should feel composed, sunlit, natural, and considered.\n\nThe website acts as both a brand world and a booking path. It must create desire through atmosphere, then reduce hesitation through clear room information, amenities, location context, policies, contact paths, and visible booking actions.",
+    "keyCharacteristics": [
+      "Slow editorial pacing: Large image moments, short copy, and spacious layouts that let users linger.",
+      "Modern tropical architecture: Flat planes, sharp image frames, clean geometry, vertical rhythm, and teak-inspired warmth.",
+      "Quiet luxury: Premium through balance, typography, materials, and silence, not decorative excess.",
+      "Human hospitality: Calm and refined, but never inaccessible, cryptic, or too minimal to use.",
+      "Clear conversion: Booking actions stay visible and confident without using aggressive urgency tactics."
+    ],
+    "rules": [
+      {
+        "name": "The 10% Accent Rule",
+        "body": "Palm Green and Pool Blue must never exceed 10% of any page or screen. The interface remains anchored in Coconut White, Limestone, Espresso, and photography.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Grounding Rule",
+        "body": "Do not use pure black (#000000) or pure white (#FFFFFF) in interface surfaces or typography. Use Espresso and Coconut White instead.",
+        "section": "colors"
+      },
+      {
+        "name": "The Photography First Rule",
+        "body": "Avoid using large colored UI blocks to force a tropical mood. Let real imagery carry the atmosphere.",
+        "section": "colors"
+      },
+      {
+        "name": "Contrast Rules",
+        "body": "Body text on Coconut White should use Espresso. Secondary text may use Espresso at 72-80% opacity only when contrast remains accessible. Text over images must use an overlay, solid text panel, or low-detail image area. Do not place small uppercase labels directly on busy photography.",
+        "section": "colors"
+      },
+      {
+        "name": "The Poetic plus Practical Rule",
+        "body": "Pair poetic serif headlines with practical Manrope copy. Example: 'Slow living, naturally.' followed by details about rooms, pool, shared dining, location, and booking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Upper-Spaced Label Rule",
+        "body": "Uppercase labels should be small and controlled. Do not use uppercase for long sentences or essential mobile body content.",
+        "section": "typography"
+      },
+      {
+        "name": "The Readability Rule",
+        "body": "No paragraph should exceed 65ch. Avoid very thin text weights. Avoid low-contrast beige text for important content.",
+        "section": "typography"
+      },
+      {
+        "name": "The Light-on-Dark Rule",
+        "body": "When Coconut White text appears on Espresso, increase font weight by one step or slightly increase line-height to maintain comfortable readability.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest. Shadows appear only as a response to state (hover, elevation, focus).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Use warm off-white and limestone surfaces.",
+      "Use Playfair Display for emotional moments and Manrope for practical clarity.",
+      "Keep layouts spacious and editorial.",
+      "Pair every mood section with clear user value.",
+      "Keep room cards practical.",
+      "Keep booking visible but calm.",
+      "Optimize images for performance.",
+      "Use real property and atmosphere photography.",
+      "Use small functional radius only when usability needs it.",
+      "use clamp() for display typography to ensure fluid layout scaling across viewports.",
+      "keep card borders and buttons completely sharp (border-radius: 0px).",
+      "limit paragraph text block widths to 65ch to maintain spacious, readable columns.",
+      "use Limestone (#E6E2D8) as a soft backing surface to highlight Coconut White (#FCFBF9) cards.",
+      "pair every mood photo with practical text labels (e.g. room name, amenities, and dimensions)."
+    ],
+    "donts": [
+      "Do not use pure black or pure white.",
+      "Do not use glassmorphism, neon, gradient text, or crypto-style UI.",
+      "Do not use heavy shadows or floating cards.",
+      "Do not use large rounded SaaS cards or pill buttons.",
+      "Do not create crowded hotel-template layouts.",
+      "Do not hide booking actions.",
+      "Do not place small text over busy images.",
+      "Do not rely on mood photography without practical details.",
+      "Do not use urgency countdowns or fake scarcity.",
+      "Do not let animations slow the experience.",
+      "Do not make the website feel like a party hostel, real-estate landing page, or generic luxury resort.",
+      "use border-left greater than 1px as a colored stripe",
+      "use gradient text (background-clip: text with a gradient) or glassmorphic blur panels.",
+      "use standard SaaS templates (such as centered hero stacks with large rounded-corner icons).",
+      "use em-dashes (\u2014) or double hyphens (--) in editorial copy. Use commas, colons, or periods."
+    ]
+  }
+}
