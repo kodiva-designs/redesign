@@ -27,10 +27,11 @@
   --sky:          oklch(0.95 0.020 220);     /* #DCEFF5 calm */
   --sand:         oklch(0.93 0.022 65);      /* #EAD9C7 warmth */
 
-  /* Type */
-  --font-sans: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+  /* Type — Bricolage Grotesque for display/headings, Hanken Grotesk for body/UI.
+     One committed grotesque pairing. No serif, no monospace. */
+  --font-sans: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: var(--font-sans); /* mono dropped brand-wide; alias keeps token intact without new voice */
 
   /* Radius */
   --r-sm: 12px;
@@ -65,12 +66,15 @@ ul, ol { list-style: none; }
 /* ---------- 3. BASE ---------- */
 body {
   font-family: var(--font-sans);
-  font-feature-settings: 'ss01', 'cv11', 'kern';
+  font-feature-settings: 'kern', 'liga';
+  font-optical-sizing: auto;
   background: var(--bg);
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.55;
   font-size: clamp(16px, 1.05vw + 0.6rem, 18px);
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
@@ -96,19 +100,24 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- 4. TYPOGRAPHY ---------- */
 .section-title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(2.4rem, 5.5vw, 4.6rem);
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
+  font-variation-settings: 'opsz' 72;
   color: var(--ink);
+  text-wrap: balance;
 }
 .section-title .line { display: inline-block; }
+/* Emphasis word: accent color + heavier weight inside Bricolage. No italic cut
+   (neither chosen family ships one), no second family, no serif. The weight+color
+   contrast carries the emphasis instead of the serif-italic trick. */
 .ital {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.035em;
   color: var(--accent);
 }
 
@@ -116,18 +125,20 @@ html.lenis, html.lenis body { height: auto; }
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-3);
   margin-bottom: 32px;
 }
 .section-label span {
-  font-family: var(--font-mono);
   color: var(--accent);
+  font-weight: 700;
   font-size: 0.85rem;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
+  font-feature-settings: 'tnum';
 }
 .section-label::before {
   content: '';
@@ -292,9 +303,11 @@ html.js .is-revealed .line {
 }
 .preloader__count {
   margin-top: 16px;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-feature-settings: 'tnum';
   font-size: 0.8rem;
-  letter-spacing: 0.1em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   opacity: 0.6;
 }
 
@@ -412,8 +425,10 @@ html.js .is-revealed .line {
   border-bottom: 1px solid oklch(0.98 0 0 / 0.1);
 }
 .mobile-menu__index {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-feature-settings: 'tnum';
   font-size: 0.8rem;
+  font-weight: 500;
   opacity: 0.4;
   letter-spacing: 0;
 }
@@ -506,12 +521,15 @@ html.js .is-revealed .line {
   100% { transform: scale(2); opacity: 0; }
 }
 .hero__title {
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(2.6rem, 4.8vw, 4.4rem);
   line-height: 0.98;
   letter-spacing: -0.04em;
+  font-variation-settings: 'opsz' 72;
   margin-bottom: 24px;
   max-width: 15ch;
+  text-wrap: balance;
 }
 .hero__sub {
   font-size: clamp(1rem, 1.3vw, 1.2rem);
@@ -610,7 +628,7 @@ html.js .is-revealed .line {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -677,11 +695,11 @@ html.js .is-revealed .line {
 .stakes__quote {
   position: relative;
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
+  font-style: normal;
+  font-weight: 400;
   font-size: clamp(1.5rem, 3vw, 2.4rem);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  line-height: 1.36; /* light-on-dark: lifted from 1.3 */
+  letter-spacing: -0.015em; /* +0.02em from the old value to compensate light-on-dark */
   color: var(--ink);
   padding: 48px 56px;
   background: var(--ink);
@@ -831,10 +849,12 @@ html.js .is-revealed .line {
 }
 .step:hover::before { width: 100%; }
 .step__num {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-feature-settings: 'tnum';
+  font-weight: 700;
   font-size: 1.05rem;
   color: var(--accent);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   transition: transform 0.6s var(--ease-out);
 }
 .step:hover .step__num {
@@ -869,7 +889,7 @@ html.js .is-revealed .line {
 .process__cta { margin-top: 64px; }
 
 /* ---------- 14. SHOWCASE — Horizontal ---------- */
-.showcase { padding: clamp(100px, 14vh, 160px) 0 0; overflow: hidden; }
+.showcase { padding: clamp(100px, 14vh, 160px) 0 0; overflow: hidden; background: var(--bg-ivory); }
 .showcase__intro { margin-bottom: 80px; }
 .showcase__lead {
   margin-top: 32px;
@@ -891,7 +911,6 @@ html.js .is-revealed .line {
   display: flex;
   flex-direction: column;
 }
-.case--tall { width: clamp(320px, 38vw, 500px); }
 .case__media {
   display: block;
   position: relative;
@@ -901,7 +920,6 @@ html.js .is-revealed .line {
   background: var(--bg-ivory);
   box-shadow: var(--shadow-md);
 }
-.case--tall .case__media { aspect-ratio: 3 / 4; }
 .case__media img {
   width: 100%; height: 100%;
   object-fit: cover;
@@ -931,8 +949,11 @@ html.js .is-revealed .line {
   flex-wrap: wrap;
 }
 .case__index {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-feature-settings: 'tnum';
+  font-weight: 600;
   font-size: 0.8rem;
+  letter-spacing: 0.04em;
   color: var(--ink-3);
 }
 .case__name {
@@ -965,10 +986,11 @@ html.js .is-revealed .line {
   margin-bottom: 20px;
 }
 .case__cta-title {
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 3.2vw, 2.6rem);
   font-weight: 600;
   letter-spacing: -0.03em;
-  line-height: 1;
+  line-height: 1.04; /* light-on-dark: lifted from 1 */
   margin-bottom: 32px;
 }
 
@@ -1128,10 +1150,11 @@ html.js .is-revealed .line {
   margin-bottom: 16px;
 }
 .leadmag__title {
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 3.2vw, 2.8rem);
   font-weight: 600;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.08;
   margin-bottom: 20px;
 }
 .leadmag__sub { color: oklch(0.98 0.004 75 / 0.7); max-width: 44ch; }
@@ -1203,10 +1226,12 @@ html.js .is-revealed .line {
   margin-bottom: 24px;
 }
 .final__title {
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4.2vw, 3.8rem);
   font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-variation-settings: 'opsz' 72;
+  line-height: 1.04; /* light-on-dark: lifted from 0.98 */
   color: var(--surface);
   margin-bottom: 24px;
 }
@@ -1373,7 +1398,6 @@ html.js .is-revealed .line {
 @media (max-width: 600px) {
   .hero__title { font-size: clamp(2.6rem, 14vw, 4rem); }
   .case { width: 78vw; }
-  .case--tall { width: 72vw; }
   .ba__wrap { aspect-ratio: 4 / 5; }
   .ba__handle-grip { width: 44px; height: 44px; }
   .section-label { margin-bottom: 24px; }

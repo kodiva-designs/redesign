@@ -73,16 +73,21 @@
       smoothWheel: true,
       smoothTouch: false,
     });
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
+    // Drive Lenis from a single loop. When GSAP/ScrollTrigger is present,
+    // hand control to gsap.ticker so Lenis stays in lockstep with
+    // ScrollTrigger (and the pinned showcase). Otherwise fall back to a
+    // standalone rAF. Never both — calling lenis.raf() twice per frame
+    // double-advances the clock and makes scroll feel janky.
     if (hasST) {
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((time) => lenis.raf(time * 1000));
       gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
     }
 
     // anchor links → lenis
